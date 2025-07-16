@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Bilis Paps Delivery | NFT Receipts</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+          <div class="logo-container">
+            <img src="https://i.ibb.co/9mZvzsqs/bilispaps.png" alt="Bilis Paps Delivery" class="logo">
+        </div>
+                <h1>Bilis Paps Delivery</h1>
+                 <p>Fast & Reliable Delivery with NFT Receipts</p>
+            </div>
+           
+        </header>
+        
+        <div class="app-grid">
+            <div class="card">
+                <h2><i class="fas fa-map-marked-alt"></i> Delivery Route</h2>
+                <div id="map" class="map-container"></div>
+                
+                <div class="controls">
+                    <button id="useMyLocationBtn" class="btn btn-primary">
+                        <i class="fas fa-location-arrow"></i> Use My Location
+                    </button>
+                    <button id="manualStartBtn" class="btn btn-secondary">
+                        <i class="fas fa-map-pin"></i> Set Start Point
+                    </button>
+                    <button id="manualDestBtn" class="btn btn-secondary">
+                        <i class="fas fa-flag"></i> Set Destination
+                    </button>
+                    <button id="clearStartBtn" class="btn" disabled>
+                        <i class="fas fa-times"></i> Clear Start
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <p id="startPointInfo">Start point not set</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="destinationInput"><i class="fas fa-location-dot"></i> Destination:</label>
+                    <input type="text" id="destinationInput" placeholder="Enter destination or click on map">
+                </div>
+                
+                <button id="calculateRouteBtn" class="btn btn-primary" disabled>
+                    <i class="fas fa-route"></i> Calculate Route
+                </button>
+                
+                <div class="form-group" style="margin-top: 15px;">
+                    <p id="distanceResult">Waiting for route calculation...</p>
+                    <input type="hidden" id="distance">
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2><i class="fas fa-calculator"></i> Price Calculator</h2>
+                <form id="priceCalculatorForm">
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="buyerService">
+                        <label for="buyerService">With Buyer Service (₱70/hour)</label>
+                    </div>
+                    
+                    <div id="buyerFields" style="display: none;">
+                        <div class="form-group">
+                            <label for="hours"><i class="fas fa-clock"></i> Estimated Hours:</label>
+                            <input type="number" id="hours" min="0.5" step="0.5" value="1.0">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="weight"><i class="fas fa-weight-scale"></i> Package Weight (kg):</label>
+                            <input type="number" id="weight" min="0.1" step="0.1" value="1.0">
+                        </div>
+                        
+                        <div id="weightWarning" class="warning">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Extra weight charge applies for packages over 7kg (₱10/kg)</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="riderName"><i class="fas fa-user"></i> Rider Name:</label>
+                        <input type="text" id="riderName" placeholder="Enter rider name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="riderId"><i class="fas fa-id-card"></i> Booking ID:</label>
+                        <input type="text" id="riderId" placeholder="Enter booking ID">
+                    </div>
+                    
+                    <button id="calculatePriceBtn" class="btn btn-accent" type="submit">
+                        <i class="fas fa-calculator"></i> Calculate Price
+                    </button>
+                </form>
+                
+                <div id="resultContainer" class="result-container" style="display: none;">
+                    <div id="deliveryCost"></div>
+                    <div id="buyerServiceDetails"></div>
+                    <div id="totalPrice" style="font-weight: bold; margin-top: 10px; font-size: 1.2rem;"></div>
+                    <div id="paymentStatus" class="payment-status"></div>
+                </div>
+                
+                <div style="margin-top: 20px; display: flex; gap: 10px;">
+                    <button id="confirmBookingBtn" class="btn btn-primary" disabled>
+                        <i class="fas fa-check-circle"></i> Confirm Booking
+                    </button>
+                    <button id="completeTransactionBtn" class="btn btn-secondary" disabled>
+                        <i class="fas fa-check-double"></i> Complete Transaction
+                    </button>
+                </div>
+                
+                <div class="wallet-info">
+                    <button id="connectWalletBtn" class="btn btn-accent">
+                        <i class="fas fa-wallet"></i> Connect Wallet
+                    </button>
+                    <p id="walletAddress">Not connected</p>
+                    <p id="networkIndicator" class="network-indicator"></p>
+                    <button id="switchToTestnetBtn" class="btn btn-warning">Switch to Testnet</button>
+                    <button id="testnetFaucetBtn" class="btn btn-info">Get Testnet Tokens</button>
+                </div>
+
+
+                
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2><i class="fas fa-receipt"></i> Transaction History with NFT Receipts</h2>
+            <div id="transactionsList"></div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; <span id="year"></span> Bilis Paps Delivery Service. All rights reserved.</p>
+        <p>NFT Receipts Powered by Blockchain Technology</p>
+    </footer>
+
+     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <!-- Fixed Ethers.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.6.9/dist/ethers.umd.min.js"></script>
+  <script type="module" src="js/firebase-config.js"></script>
+    <script type="module" src="js/script.js"></script>
+</html>
