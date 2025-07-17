@@ -169,7 +169,7 @@ function generateNFTMetadata(transactionData, txHash) {
         name: `Delivery Receipt #${transactionData.id}`,
         description: `Bilis Paps Delivery Receipt for ${transactionData.riderInfo?.name || 'Customer'} on ${networkInfo}`,
         image: "https://i.ibb.co/9mZvzsqs/bilispaps.png",
-        external_url: "https://bilispaps.com",
+        external_url: "https://bilispaps.github.io/bilispapsnfts/",
         attributes: [
             { trait_type: "From", value: transactionData.startPoint },
             { trait_type: "To", value: transactionData.destination },
